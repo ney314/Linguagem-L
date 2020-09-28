@@ -12,7 +12,6 @@ const array = string.match(/-?[0-9]+|[A-Za-z0-9]+|\S/g);
 const variables  = []; // vetor que ficarão as variáveis declaradas pela linguagem
 
 const FunctionsList = {
-  ['exp']:  [(a)=>{return exp(a)},{args:1}],
   ['sqrt']: [(a)=>{ return sqrt(a)},{args:1}],
   ['mult']: [(a,b)=>{ return multi(a,b)},{args:2}],
   ['subt']: [(a,b)=>{return subt(a,b)},{args:2}],
@@ -91,8 +90,8 @@ function identify_token(term){
     }
   }
   
- for(let i = 0 ; i<functions.length ; i++){
-    if(term == functions[i].name){
+ for(let i = 0 ; i <Object.entries(FunctionsList).length ; i++){
+    if(term == Object.entries(FunctionsList)[i][0]){
       return "function";
     }
   } 
