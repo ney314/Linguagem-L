@@ -1,0 +1,19 @@
+{
+  "name": "linguagem-l",
+  "version": "1.0.0",
+  "description": "//let string = \"mult(4,soma(3,2))\"; let string = \"mult(mult(subt(2,3),soma(3,2)),mult(mult(3,2),sqrt(16)))\"; let array = string.match(/-?[0-9]+|[A-Za-z0-9]+|\\S/g); // -?[0-9]+ -> pega uma combinação de string(+) de numeros de 0 a 9([0-9]) antecedidos ou não de -(?). Vai agrupar combinação de números APENAS. // | -> ou //[A-Za-z0-9]+ -> pega uma combinação de string(+) de letras maiusculas ou minusculas e numeros [A-Za-z0-9]; => Vai agrupar combinação de letras com números //  \\S pega qualquer coisa sem ser espaço. Necessário  para agrupar simbolos. // / ... / => indicador de regex // g -> pega todas ocorrências               let functions =  [{name: \"subt\", args: 2 },{name: \"soma\", args: 2},{name:\"divi\", args : 2},{name:\"mult\",args: 2},{name:\"exp\",args: 2},{name:\"sqrt\",args: 1}]; // vetor com as funções que serão declaradas pela linguagem let variables  = []; // vetor que ficarão as variáveis declaradas pela linguagem function exec_function(name,args){    /*funções que são executadas no javascript , acho que como as funções declaradas pela linguagem L tem instruções próprias provavelmente elas terão de ser compiladas por uma função análoga ao que compilará o codigo. Essas instruções provavelmente terão que ser aramzenadas em um campo no objeto de funções.//As funções abaixo executam o que a gente planejou e acho que elas são usadas para dar overload nos operators ==> (+,-,*,/,^). (Não sei se é necessário mas pelo que ta no site dele parece que ele quer.(Acho que não é muito difícil ))  */",
+  "main": "FuncoesSimples.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joaovitor32/Linguagem-L.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joaovitor32/Linguagem-L/issues"
+  },
+  "homepage": "https://github.com/joaovitor32/Linguagem-L#readme"
+}
