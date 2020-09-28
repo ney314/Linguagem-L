@@ -11,8 +11,6 @@ const array = string.match(/-?[0-9]+|[A-Za-z0-9]+|\S/g);
 
 const variables  = []; // vetor que ficarão as variáveis declaradas pela linguagem
 
-let functions =  [{name: "subt", args: 2 },{name: "soma", args: 2},{name:"divi", args : 2},{name:"mult",args: 2},{name:"exp",args: 2},{name:"sqrt",args: 1}]; // vetor com as funções que serão declaradas pela linguagem
-
 const FunctionsList = {
   ['exp']:  [(a)=>{return exp(a)},{args:1}],
   ['sqrt']: [(a)=>{ return sqrt(a)},{args:1}],
