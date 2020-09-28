@@ -220,6 +220,9 @@ console.log(resolve_function(array,name));
 
   *Declarar funções=> obedecer a sintaxe , salvar os dados da função como objeto e compilar as suas instruções ao ser chamada (Sua Compilação  vai ser como a do compilador do código só que com sintaxe propria e retornando algo)(vmo ter que ser godlike);  */
   
+<h3>How To Use</h3>
+
+To clone and run this application, you'll need [Git](https://git-scm.com), [Node.js v10.16][nodejs] or higher + [Yarn v1.13][yarn] or higher, installed on your computer. From your command line:
   
   ```bash
 # Clone this repository
