@@ -1,27 +1,27 @@
-let string = "mult(mult(subt(2,3),soma(3,2)),mult(mult(3,2),sqrt(16)))";
-let array = string.match(/-?[0-9]+|[A-Za-z0-9]+|\S/g);
-let functions =  [{name: "subt", args: 2 },{name: "soma", args: 2},{name:"divi", args : 2},{name:"mult",args: 2},{name:"exp",args: 2},{name:"sqrt",args: 1}]; // vetor com as funções que serão declaradas pela linguagem
-let variables  = []; // vetor que ficarão as variáveis declaradas pela linguagem
+import divi from './utils/divi.js';
+import multi from './utils/multi.js';
+import soma from './utils/soma.js';
+import sqrt from './utils/sqrt.js';
+import exp from './utils/exp.js';
+import subt from './utils/subt.js';
+import getNumberOfArguments from './utils/getNumberOfArguments.js';
 
-function exec_function(name,args){ 
- 
-  switch(name){ 
-      
-    case "mult":
-      return Math.round(args[0] * args[1]);
-    case "soma":
-      return Math.round(args[0] + args[1]);
-    case "subt":
-      return Math.round(args[0] - args[1]);
-    case "divi":
-      return Math.round(args[0] / args [1]);
-    case "exp":
-      return Math.round(args[0] ^ args[1]);
-    case "sqrt":
-      return Math.round(Math.sqrt(args[0]));
-  }
-    
-}
+const string = "mult(mult(subt(2,3),soma(3,2)),mult(mult(3,2),sqrt(16)))";
+const array = string.match(/-?[0-9]+|[A-Za-z0-9]+|\S/g);
+
+const variables  = []; // vetor que ficarão as variáveis declaradas pela linguagem
+
+let functions =  [{name: "subt", args: 2 },{name: "soma", args: 2},{name:"divi", args : 2},{name:"mult",args: 2},{name:"exp",args: 2},{name:"sqrt",args: 1}]; // vetor com as funções que serão declaradas pela linguagem
+
+const FunctionsList = {
+  ['exp']:  [(a)=>{return exp(a)},{args:1}],
+  ['sqrt']: [(a)=>{ return sqrt(a)},{args:1}],
+  ['mult']: [(a,b)=>{ return multi(a,b)},{args:2}],
+  ['subt']: [(a,b)=>{return subt(a,b)},{args:2}],
+  ['soma']: [(a,b)=>{return soma(a,b)},{args:2}],
+  ['divi']: [(a,b)=>{return divi(a,b)},{args:2}],
+};
+
 /*função que copia um array para outro , diferença dela pra array1 = array2 é que nesse caso se vc fazer alteração em um fará no outro . Se eu só copiar os elementos por meio de uma função como a abaixo, serão dois vetores independetes e portanto, fazendo alteração em um não afeta o outro. */
 function array_copy(array,from = 0){
   
@@ -36,12 +36,7 @@ function array_copy(array,from = 0){
   return new_array;
 }
 
-function get_number_of_arguments(Function){
-  
-   return functions.find(obj => obj.name == Function).args;
-  
-  
-}
+
 /*pego o campo da string que está o argumento , por exemplo no array soma(1,2), o vetor de token seria ["soma","(", "1" , "," , "2", ")" ] , essa função pega o campo ["1" , "," , "2"] que vai ser usado em outra função pra pegar os argumentos separadamente , note que devido ao fato de poder ter nested functions vai haver diversos parenteses e como o parentese é usada para delimitar a string, se faz necessário um contador de parenteses pra verificar a sintaxe e pra pegar o campo corretamente. */
 function get_argument_line(array){
   
@@ -112,7 +107,8 @@ function identify_token(term){
 function resolve_function(array,name){
   
 
-  let n_args = get_number_of_arguments(name); // pega o numero de argumentos da função , devido ao fato de uma função pode ter varios argumentos o numero de argumentos seria pego ao ser declarada contando os itens no detro parentese quando a função é declarada.
+  let n_args = getNumberOfArguments(FunctionsList,name); // pega o numero de argumentos da função , devido ao fato de uma função pode ter varios argumentos o numero de argumentos seria pego ao ser declarada contando os itens no detro parentese quando a função é declarada.
+
   let args=[];                          //espaço que vai ser armazenado os argumentos da função já "numerizados".
   let arg = get_argument_line(array); 
   let pos = 0;                         // vai ser usado para verificar a sintaxe dos termos
@@ -177,9 +173,8 @@ function resolve_function(array,name){
     
   }
   
-  return exec_function(name,args);
- 
-  
+  return FunctionsList[name][0](...args);
+
 } 
 let name = array.shift();
 console.log(resolve_function(array,name));
