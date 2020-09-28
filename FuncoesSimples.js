@@ -19,7 +19,6 @@ const FunctionsList = {
   ['divi']: [(a,b)=>{return divi(a,b)},{args:2}],
 };
 
-/*função que copia um array para outro , diferença dela pra array1 = array2 é que nesse caso se vc fazer alteração em um fará no outro . Se eu só copiar os elementos por meio de uma função como a abaixo, serão dois vetores independetes e portanto, fazendo alteração em um não afeta o outro. */
 function array_copy(array,from = 0){
   
   let new_array = [];
@@ -29,7 +28,7 @@ function array_copy(array,from = 0){
     new_array.push(array[i]);
     
   }
-  
+
   return new_array;
 }
 
@@ -99,31 +98,42 @@ function identify_token(term){
   return undefined;
   
 }
-// funçao recursiva que separa os argumentos das funções e das funçoes nested , e as executam  através de uma chamada em árvore onde as raizes seriam as funções sem função nested.
 
+// funçao recursiva que separa os argumentos das funções e das funçoes nested , e as executam  através de uma chamada em árvore onde as raizes seriam as funções sem função nested.
 function resolve_function(array,name){
   
 
-  let n_args = getNumberOfArguments(FunctionsList,name); // pega o numero de argumentos da função , devido ao fato de uma função pode ter varios argumentos o numero de argumentos seria pego ao ser declarada contando os itens no detro parentese quando a função é declarada.
+  // pega o numero de argumentos da função , devido ao fato de uma função pode ter varios argumentos o numero de argumentos seria pego ao ser declarada contando os itens no detro parentese quando a função é declarada.
+  let n_args = getNumberOfArguments(FunctionsList,name); 
 
-  let args=[];                          //espaço que vai ser armazenado os argumentos da função já "numerizados".
+   //espaço que vai ser armazenado os argumentos da função já "numerizados".
+  let args=[];                         
   let arg = get_argument_line(array); 
-  let pos = 0;                         // vai ser usado para verificar a sintaxe dos termos
-  let term = arg[0];                   //primeiro item na string de argumento -> se inteiro ele vai ser o primeiro item em args[] , se função executa a resolve_function nele. 
-  for(let i = 0 ; i < n_args; i++){    // iteração para caminhar todos os argumentos que serão separados por virgula.
+
+  // vai ser usado para verificar a sintaxe dos termos
+  let pos = 0;                  
+  
+  //primeiro item na string de argumento -> se inteiro ele vai ser o primeiro item em args[] , se função executa a resolve_function nele.
+  let term = arg[0];                  
+  
+  // iteração para caminhar todos os argumentos que serão separados por virgula.
+  for(let i = 0 ; i < n_args; i++){   
     
-    if(arg[pos-1]=="," | i== 0){  // numa função soma(a,b) -> arg = ["a", "," , "b"] não se espera uma virgula antes do primeiro token , como em soma(,a,b) => ["," , "a", "," , "b"], portanto na primeira iteração isso vai ser sempre verdadeiro (i=0) sendo coeso com a sintaxe soma (a,b) ou soma(a,b,c) e assim por diante...
+    // numa função soma(a,b) -> arg = ["a", "," , "b"] não se espera uma virgula antes do primeiro token , como em soma(,a,b) => ["," , "a", "," , "b"], portanto na primeira iteração isso vai ser sempre verdadeiro (i=0) sendo coeso com a sintaxe soma (a,b) ou soma(a,b,c) e assim por diante...
+    if(arg[pos-1]=="," | i== 0){  
       
     }
     else{
       throw new SyntaxError();
     }
-    switch (identify_token(term)){   //Se ao declarar uma função for necessario informar a natureza dos argumentos , como em C => blabla(int a , string b) , seria necessario criar um outro campo em função com a natureza dos argumentos e tambem necessário fazer uma estrutura de fluxo nesses cases abaixo.
+
+     //Se ao declarar uma função for necessario informar a natureza dos argumentos , como em C => blabla(int a , string b) , seria necessario criar um outro campo em função com a natureza dos argumentos e tambem necessário fazer uma estrutura de fluxo nesses cases abaixo.
+    switch (identify_token(term)){  
 
       case "function":
           
-        
-        let this_arg = array_copy(arg,pos); // criando um novo array com os mesmos elementos de arg
+        // criando um novo array com os mesmos elementos de arg
+        let this_arg = array_copy(arg,pos); 
         let func_name = this_arg.shift(); 
         
         /*o primeiro termo seria o nome de uma função  Ex: soma(subt(a,a),b) arg:[ "subt" , "(" , "a", "," , "a", ")", "," , "b" ] onde subt seria o func_name e seria retirado para obter o seu arg em get_argument_line e func_name usado para saber oq executar e pegar as informações da função */
@@ -131,7 +141,8 @@ function resolve_function(array,name){
         
         /*pegando o  exemplo acima o  get_argument_line de subt seria ["a", "," , "a"] , isso significa que o tamanho dessa função no token é o get_argument_line.length + os itens que foram excluidos que seriam os dois parenteses mais o nome da função [ >"subt"< , "(" , "a", "," , "a", > ")" <] , dessa forma sabemos que a virgula tem que estar no proximo token para obedecer a sintaxe , ou seja , pos = pos(0) + get_argument_line(this_arg).length + 3 . */
         
-        args.push(resolve_function(this_arg,func_name));    //adiciona o retorno dos valores das funções nested como argumento dessa função
+        //adiciona o retorno dos valores das funções nested como argumento dessa função
+        args.push(resolve_function(this_arg,func_name));    
 
         
         break;
