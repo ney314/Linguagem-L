@@ -219,3 +219,19 @@ console.log(resolve_function(array,name));
   *O compilador vai ter que ter cada linha salva, e em cada linha identifcar o que cada token representa e o que esperar como próximo token e saber como jogar os erros caso algo dê errado(com certeza vai ser duro esse). 
 
   *Declarar funções=> obedecer a sintaxe , salvar os dados da função como objeto e compilar as suas instruções ao ser chamada (Sua Compilação  vai ser como a do compilador do código só que com sintaxe propria e retornando algo)(vmo ter que ser godlike);  */
+  
+  
+  ```bash
+# Clone this repository
+$ git https://github.com/joaovitor32/Linguagem-L
+
+# Go into the repository
+$ cd Linguagem-L
+
+# Install dependencies
+$ npm install
+
+# Run the app
+$ npm start
+
+```
