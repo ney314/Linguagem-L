@@ -235,6 +235,6 @@ $ cd Linguagem-L
 $ npm install
 
 # Run the app
-$ npm start
+$ node FuncoesSimples.js
 
 ```
