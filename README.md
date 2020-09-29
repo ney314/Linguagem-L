@@ -40,3 +40,12 @@ $ npm install
 $ node FuncoesSimples.js
 
 ```
+
+<h3>To run tests</h3>
+
+   ```bash
+
+npm run test
+
+```
+
