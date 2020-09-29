@@ -5,7 +5,7 @@
   "main": "FuncoesSimples.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -16,5 +16,13 @@
   "bugs": {
     "url": "https://github.com/joaovitor32/Linguagem-L/issues"
   },
-  "homepage": "https://github.com/joaovitor32/Linguagem-L#readme"
+  "homepage": "https://github.com/joaovitor32/Linguagem-L#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "babel-core": "^7.0.0-0",
+    "babel-jest": "^26.3.0",
+    "jest": "^26.4.2"
+  }
 }

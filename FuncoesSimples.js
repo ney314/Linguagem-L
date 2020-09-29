@@ -120,7 +120,7 @@ function get_argument_line(array){
         pt_count--;
       }
       if(pt_count < 0  ){
-        throw new SyntaxError();
+        throw new Error();
       }
       if(pt_count == 0){
         break;
@@ -130,13 +130,13 @@ function get_argument_line(array){
     }
 
     if(iterator==array.length){
-      throw new SyntaxError("parenteses errados!!");
+      throw new Error("parenteses errados!!");
       // quer dizer que não foi achado o mesmo número de parenteses fechados iguais aos abertos.
     }
     return new_array;
   }
   else{
-    throw new SyntaxError("sintaxe da função errada!!")
+    throw new Error("sintaxe da função errada!!")
     //quer dizer que não ouve abertura de parentese apos a definição da função.
   }
 }
@@ -219,6 +219,7 @@ function resolve_function(array,name){
 } 
 
 rl.question("Insira a sentença ? ",(sentence) => {
+  
   const array = sentence.match(/-?[0-9]+|[A-Za-z0-9]+|\S/g);
   const name = array.shift();
 
@@ -228,3 +229,16 @@ rl.question("Insira a sentença ? ",(sentence) => {
 rl.on("close", function() {
   process.exit(0);
 });
+
+/*-------- Test function --------*/
+
+function test_resolve_function(sentence){
+  
+  const array = sentence.match(/-?[0-9]+|[A-Za-z0-9]+|\S/g);
+  const name = array.shift();
+
+  return resolve_function(array,name)
+
+}
+
+export default test_resolve_function;
