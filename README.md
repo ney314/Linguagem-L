@@ -18,6 +18,10 @@ Para implementar a linguagem, 4 grupos são suficientes.
   3) Grupo que implementa função gráfica
   4) Grupo que testa e disponibiliza as informações em um site do Google sites.
 
+Ex de entrada:
+    
+   <strong>mult(mult(2,3),soma(4,5))</strong>
+  
 <h3>How To Use</h3>
 
 To clone and run this application, you'll need [Git](https://git-scm.com), [Node.js v10.16][nodejs] or higher + [Yarn v1.13][yarn] or higher, installed on your computer. From your command line:
@@ -36,3 +40,12 @@ $ npm install
 $ node FuncoesSimples.js
 
 ```
+
+<h3>To run tests</h3>
+
+   ```bash
+
+npm run test
+
+```
+
