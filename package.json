@@ -5,7 +5,7 @@
   "main": "FuncoesSimples.js",
   "type": "module",
   "scripts": {
-    "test": "jest"
+    "test": "jest --forceExit"
   },
   "repository": {
     "type": "git",

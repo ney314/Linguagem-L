@@ -10,6 +10,10 @@ describe('Cheking Simple Function compiler results',()=>{
         expect(test_resolve_function('mult(mult(subt(2,3),soma(3,2)),mult(mult(3,2),sqrt(16)))')).toBe(-120);
     });
 
+    it("Giving 1+2 as parameter expected result 3 ",()=>{
+        expect(test_resolve_function('1+2')).toBe(3);
+    });
+
     it("Giving mult(4,5 as parameter expected error ",async()=>{
     
         await expect(()=>{test_resolve_function('mult(4,5')}).toThrow(Error);
