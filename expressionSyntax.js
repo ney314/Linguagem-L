@@ -26,8 +26,7 @@ function Main(){
     let operator_list=[];
     let test ;
     Create_operator(operator_list);
-    //let expression = "((90-10)*-(100*20+10*-30+0-40)+3%2*3^4*5+&20";
-    let expression = "((90-10)*-(100*20+10*-30+0-40))+3%2*3^4*5+&20*4";
+    let expression = "(((90-10)*-(100*20+10*-30+0-40))+3%2*3^4*5+&20)";
 
     //operador & criei só pra mostrar q da pra fazer qualquer magia aqui , no caso o & add 1000 no numero da frente(((90-10)*(100*20-300)-40)+3%2*3^4*5+1020). Com isso ja da pra criar expressão booleana facilmente.
     let array = expression.match(/[0-9]+|[A-Za-z0-9]+|\S/g);
@@ -119,12 +118,19 @@ function Main(){
                             pt_count--;
                             i++;
                             }
+                            if(identify(exp_array[i])=="operator" | i == exp_array.length){
 
+                            }
+                            else{
+                                array.splice(i,0,"\x1b[32m>>>>>>>>>>>>\x1b[0m");
+                                array.splice(i+2,0,"\x1b[32m<<<<<<<<<<<<\x1b[0m");
+                                throw new SyntaxError("Unexpected token :" + array.join(""));;
+                            }
                         }
                         else{
                             array.splice(i,0,"\x1b[32m>>>>>>>>>>>>\x1b[0m");
-                            array.splice(i+2,0,"\x1b[32m<<<<<<<<<<<<\x1b[0m");  
-                            throw new SyntaxError("Unexpected token :" + '\x1b[32m%s\x1b[0m', array.join(""));
+                            array.splice(i+2,0,"\x1b[32m<<<<<<<<<<<<\x1b[0m");
+                            throw new SyntaxError("Unexpected token :" + array.join(""));;
                         }
 
                     }
@@ -135,7 +141,7 @@ function Main(){
                     else{
                         array.splice(i,0,"\x1b[32m>>>>>>>>>>>>\x1b[0m");
                         array.splice(i+2,0,"\x1b[32m<<<<<<<<<<<<\x1b[0m");
-                        throw new SyntaxError("Unexpected token :" + '\x1b[32m%s\x1b[0m', array.join(""));
+                        throw new SyntaxError("Unexpected token :" + array.join(""));;
                     }
 
                 
@@ -154,9 +160,17 @@ function Main(){
                     }
                     else if(exp_array[i]==")"){
                         
-                        while(identify(exp_array[i])==")"){
-                        pt_count--;
-                        i++
+                        while(exp_array[i]==")"){
+                            pt_count--;
+                            i++;
+                            if(identify(exp_array[i])=="operator" | i == exp_array.length){
+
+                            }
+                            else{
+                                array.splice(i,0,"\x1b[32m>>>>>>>>>>>>\x1b[0m");
+                                array.splice(i+2,0,"\x1b[32m<<<<<<<<<<<<\x1b[0m");
+                                throw new SyntaxError("Unexpected token :" + array.join(""));;
+                            }
                         }
                     }
                     
@@ -229,11 +243,11 @@ function Main(){
                 }
 
             }
+
             else{
                 array.splice(i,0,"\x1b[32m>>>>>>>>>>>>\x1b[0m");
                 array.splice(i+2,0,"\x1b[32m<<<<<<<<<<<<\x1b[0m");
-                errorstring = array.join("")
-                throw new SyntaxError("Unexpected token :" +  errorstring);
+                throw new SyntaxError("Unexpected token :" + array.join(""));
             }
            
         }
