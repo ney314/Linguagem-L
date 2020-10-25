@@ -1,0 +1,416 @@
+class Functions{
+
+    constructor(list){
+        this.list = list
+    }
+    get_function_args(func){
+
+        for(let i = 0 ; i < this.list.length ; i++){
+            if(func  == this.list[i].name){
+                return this.list[i].args;
+            }
+        }
+    }
+    get_function_nargs(func){
+
+        for(let i = 0 ; i < this.list.length ; i++){
+            if(func  == this.list[i].name){
+                return this.list[i].nargs;
+            }
+        }
+    }
+    get_function_instruction(func){
+
+        for(let i = 0 ; i < this.list.length ; i++){
+            if(func  == this.list[i].name){
+                return this.list[i].instruction;
+            }
+        }
+    }
+    get_function_name(func){
+
+        for(let i = 0 ; i < this.list.length ; i++){
+            if(func  == this.list[i].name){
+                return this.list[i].name;
+            }
+        }
+    }
+    
+}
+class operator_list{
+
+    constructor(op_list){
+        this.op_list = op_list;
+    }
+    get_operator_precedence(operator){
+
+        for(let i=0; i<this.op_list.length ; i++){
+            if(operator==this.op_list[i].token){
+                return this.op_list[i].precedence;
+            }
+        }
+        return 0;
+    }
+    get_operator_associativity(operator){
+
+        for(let i=0; i<this.op_list.length ; i++){
+            if(operator==this.op_list[i].token){
+                return this.op_list[i].associativity;
+            }
+        }
+    }
+    get_operator_token(token){
+
+        for(let i=0; i<this.op_list.length ; i++){
+            if(token==this.op_list[i].token){
+                return this.op_list[i].token;
+            }
+         }
+    }
+    get_operator_type(operator){
+
+        for(let  i=0 ; i<this.op_list.length ; i++){
+
+                if(this.op_list[i].token == operator){
+                
+                return this.op_list[i].type;
+                }
+        }
+    }
+    
+}
+class Stack {
+    constructor() {
+      this.dataStore = [];
+      this.top = 0;
+      this.peek = () => {
+        if(this.top==0){
+
+            return false;
+        }
+        return this.dataStore[this.top - 1];
+      }
+      this.push = (element) => {
+        if (!!element) {
+          this.dataStore[this.top++] = element;
+        }
+      }
+      this.pop = () => {
+        this.top--;
+        return this.dataStore.pop();
+      }
+  
+      this.length = () => {
+        return this.top;
+      }
+    }
+  }
+function create_function_object(name,args,instruction){
+
+    let func = {name:"",args:"",nargs:"",instruction:""};
+    func.name = name;
+    func.args = args;
+    func.nargs = args.length;
+    func.instruction = instruction;
+    return func;
+
+}
+function create_operator_object(token,precedence,associativity,type){
+    
+    let operator = {token:"",precedence:"",associativity:"",type:""};
+    operator.token = token;
+    operator.precedence = precedence;
+    operator.associativity = associativity;
+    operator.type = type;
+    return operator;
+
+}
+function create_operator_list(){
+    
+    let op_list=[];
+    op_list.push(create_operator_object("+",2,"left","binary"));
+    op_list.push(create_operator_object("-",2,"left","binary"))
+    op_list.push(create_operator_object("*",3,"left","binary"))
+    op_list.push(create_operator_object("/",3,"left","binary"))
+    op_list.push(create_operator_object("^",5,"right","binary"))
+    op_list.push(create_operator_object("'",5,"right","unary"))
+    op_list.push(create_operator_object("%",4,"left","binary"))
+    op_list.push(create_operator_object("&",4,"right","unary"))
+    return new operator_list(op_list);
+
+}              
+function create_functions(){
+
+    let func_list = []
+    func_list.push(create_function_object("mult",["a","b"],"return a*b"))
+    func_list.push(create_function_object("soma",["a","b"],"return a+b"))
+    func_list.push(create_function_object("subt",["a","b"],"return a-b"))
+    return new Functions(func_list);
+
+}
+function reduce_expression(number1,number2,operator){
+switch (operator){
+    case "+":
+    return number1+number2
+    case "-":
+    return number1-number2
+    case "*":
+    return number2*number1;
+    case "/":
+    return number2/number1;
+    case "^":
+    return Math.pow(number1,number2);
+    case "'":
+    return -number2;
+    case "%":
+    return number1%number2;
+    case "&":
+    return number2+1000;
+}
+}
+
+function tokenize(array){
+    return array.match(/[0-9]+|[A-Za-z0-9]+|\S/g)
+}
+function Unexpected_token_error(array,pos){
+    array.splice(pos,0,"\x1b[30m>>>>>>>>>>>>\x1b[0m");
+    array.splice(pos+2,0,"\x1b[30m<<<<<<<<<<<<\x1b[0m");
+    throw new SyntaxError("Unexpected token :" + array.join(""));
+}
+function Main(){
+
+    let test ;
+    let operator_list = create_operator_list();
+    let functions = create_functions();
+    //let expression = "((90-10)*-(100*20+10*-30+0-40))+3%2*3^4*5+&20*4";
+    let expression ="((90-10)+(+(100+30*20+10*-30+0-40)+3%2*3^4)*5)+&20*4"
+    //operador & criei só pra mostrar q da pra fazer qualquer magia aqui , no caso o & add 1000 no numero da frente(((90-10)*(100*20-300)-40)+3%2*3^4*5+1020). Com isso ja da pra criar expressão booleana facilmente.
+    let array = tokenize(expression)
+    function identify(term){
+
+        if(term==undefined){
+         return undefined;
+        }
+        if(term == "("){
+            return "(";
+        }
+        if(term == ")"){
+            return ")";
+        }
+        if(parseInt(term) | term=="0"){
+            return "integer";
+        }
+        if(term.match(/^(".*")|('.*')$/)){
+
+            return "string";
+
+        }
+        if(operator_list.get_operator_token(term)){
+            return "operator";
+        }
+        if(functions.get_function_name(term)){
+            return "function";
+        }
+    }
+      function expressionSyntax(exp_array){
+
+        let pt_count = 0;
+        let identifier;
+        for(let i=0;i<exp_array.length;i++){
+            
+            identifier = identify(exp_array[i]);
+            if(exp_array[i]=="("){
+                 
+                pt_count++;
+                i++;
+                identifier = identify(exp_array[i]);
+                if(exp_array[i]=="("){
+                    i--;
+                    
+                }
+                else if(exp_array[i]=="-" | exp_array[i]=="+"){
+
+                    i--
+
+                
+                }
+                else if(identifier=="integer" | identifier=="variable" | identifier=="function"){
+
+                   i--
+
+                }
+                else{
+                    Unexpected_token_error(array,i)
+                }
+            }
+            else if((exp_array[i-1]!=exp_array[i]) & (exp_array[i]=="-" | exp_array[i]=="+" | operator_list.get_operator_type(exp_array[i])=="unary")){
+
+                i++;
+                identifier = identify(exp_array[i]);
+                if(identifier=="integer" | identifier=="variable" | identifier=="function"){
+
+                    i--
+
+                }
+                else if(identifier=="("){
+                    i--;
+                }
+                else{
+                    Unexpected_token_error(array,i);
+                }
+                
+            }
+            else if(identifier=="integer" | identifier=="variable" | identifier=="function"){
+
+                if(identifier=="variable"){
+
+                    exp_array[i]= variable.get_value(exp_array[i]);
+                    
+                }
+                else if(identifier =="function"){
+                    
+                    let func_array = exp_array.slice(i,exp_array.length);
+                    let [result,function_size] = solve_function(func_array);
+                    exp_array.splice(i,function_size+1,result);
+                }
+
+                i++
+                if(i==exp_array.length){
+
+                    break;
+
+                }
+                else if(identify(exp_array[i])=="operator"){
+
+                }
+                else if(exp_array[i]==")"){
+
+                    while(exp_array[i]==")"){
+                        pt_count--;
+                        i++
+                    }
+                    if(identify(exp_array[i])=="operator" | i == exp_array.length){
+
+                    }
+                    else{
+                        Unexpected_token_error(array,i);
+                    }
+                }
+                else{
+                    Unexpected_token_error(array,i);
+                }
+
+            }
+
+            else{
+                Unexpected_token_error(array,i);
+            }
+           
+        }
+        if(pt_count!=0){
+            throw new SyntaxError("Missing parenthese");
+        }
+        return true;
+    }
+    function RPN(expression_array){
+    
+        let operator_stack = [];
+        let output = [];
+        let token;
+        for(let i = 0 ; i <expression_array.length; i++ ){
+          
+          token = expression_array[i];
+           if(token=="-" & (identify(expression_array[i-1])=="operator"|expression_array[i-1]=="(" | expression_array[i-1]==undefined))
+            {
+              expression_array.splice(i,1,"'")
+              token = "'";
+            }
+          //no caso do 10--10 para ele reconhecer como unario o segundo menos e inverter o sinal do numero eu na hora de montar ele tenho que mudar o "-" que é unário por " ' ", a negação de discreta , porque desse modo eu consigo diferenciar na hora de resolver se ele é o operador unário ou o operador de subtração. 
+          if(token=="+" & (identify(expression_array[i-1])=="operator"|expression_array[i-1]=="(" | expression_array[i-1]==undefined))
+            {
+              expression_array.splice(i,1,)
+              i--;
+              token = expression_array[i];
+            }
+      // caso de 10+++10 , eu não faço nada além deletar os + que não são operadores e no final obtenho 10+10 normalmente.
+          if(identify(token)=="integer"){
+            output.push(token);
+          }
+          else if(identify(token)=="function"){
+            //operator_stack.push(new operator(token);
+          }
+          else if(identify(token)=="operator"){
+            let stack_top = operator_stack[operator_stack.length-1];
+            while((stack_top!=undefined) & ( operator_list.get_operator_precedence(stack_top)>operator_list.get_operator_precedence(token)
+                                          | (operator_list.get_operator_precedence(stack_top)==operator_list.get_operator_precedence(token) & operator_list.get_operator_associativity(token)=="left"))
+                                           & (stack_top!="(")){
+                 
+                 output.push(operator_stack.pop());
+                 stack_top = operator_stack[operator_stack.length-1];
+            }
+            
+            operator_stack.push(token);
+          }
+    
+          else if(token=="("){
+            operator_stack.push(token);
+          }
+          else if(token ==")"){
+            let stack_top = operator_stack[operator_stack.length-1];
+            while(stack_top!="("){
+              output.push(operator_stack.pop());
+              stack_top = operator_stack[operator_stack.length-1];
+          }
+            if(stack_top=="("){
+              operator_stack.pop();
+            }
+          }  
+        }
+        for(let i=0;i<operator_stack.length;i++){
+         if(identify(operator_stack[i])=="operator"){
+            output.push(operator_stack.pop())
+            i--;
+          }
+        }
+        return output;
+      } //passa pra reversed polish
+    function solve_RPN(RPN_array){
+        let result=0;
+        let number2;
+        let pos=0;
+        while(RPN_array.length!=1){
+            
+          while(identify(RPN_array[pos])!="operator"){
+            result = RPN_array[pos-1];
+            number2 = RPN_array[pos++];
+            }
+         
+          result = reduce_expression(parseInt(result,10),parseInt(number2,10),RPN_array[pos])
+          console.log(result);
+          if(operator_list.get_operator_type(RPN_array[pos])=="binary"){
+            RPN_array.splice(pos-2,3,result)
+            pos = pos -2;
+          }
+         else{
+           RPN_array.splice(pos-1,2,result)
+           pos = pos - 1;
+         }
+         result = RPN_array[pos-1];
+         number2 = RPN_array[pos++];
+         
+        }
+       return parseInt(RPN_array[0]); 
+      } //resolve a expressão em reversed polish -> salvo dois numeros sempre e quando chega em um operador eu resolvo os dois numeros para o operador e depois removo os dois numeros que foram executados tal como operador , caso o operador seja unario eu só altero o ultimo numero e o operador, por exemplo , 10+&10, vou operar o segundo numero somando 1000 nele, ou seja 10+1010.
+    
+    function solve_expression(exp_array){
+        expressionSyntax(exp_array);
+        return solve_RPN(RPN(exp_array));
+    }
+     //resolve a expressão em reversed polish -> salvo dois numeros sempre e quando chega em um operador eu resolvo os dois numeros para o operador e depois removo os dois numeros que foram executados tal como o operador , caso o operador seja unario eu só altero o ultimo numero e o operador, por exemplo , 10+&10, vou operar o segundo numero somando 1000 nele, ou seja 10+1010.
+    
+    
+   return solve_expression(array);
+ 
+}
+
+console.log(Main());
