@@ -638,7 +638,23 @@ function Main(){
     //     throw SyntaxError("Expecting something after function declaration "+ line[1])
     // }
 
-    
+    function tipo_vetor(array,pos){
+        identificador = identify(array[pos])
+        if(identify(array[pos])=="Vetor"){
+            if(array.Array(array[pos])){
+                return [array[pos],1];
+            }
+            else{
+                return [armaz.get_vetor_array(array[pos]),1];
+            }
+        }
+        else if(identificador=="["){
+            let pos_alteração =  []
+            pos_alteração[0]=pos
+            let vetor = vetor_decl(array,pos_alteração);
+            return [vetor,pos_alteração[0]]
+        }
+    }
     function reduce_function(args_value,args,instruction,name){
         
         let instruc_array =[];
@@ -875,19 +891,12 @@ function Main(){
                     exp_array.splice(i,Função_size+1,result);
 
                 }
-                else if(identifier=="Vetor"){
-                    if(Array.isArray(exp_array[i])){
-                    }
-                    else{
-                        exp_array[i]= armaz.get_vetor_array(exp_array[i])
-                    }
-                    pos_atual[0]++;
-                }
-                else if(identifier=="["){
-                   let pos_anterior =  pos_atual[0]
-                   let vetor = vetor_decl(array_linha,pos_atual);
-                   exp_array.splice(i,pos_atual[0]-pos_anterior,vetor);
-
+                
+                else if(identifier=="Vetor" | identifier =="["){
+                    
+                   let [valor,pos_depois] = tipo_vetor(exp_array,i);
+                    pos_atual[0] += pos_depois - i;
+                    exp_array.splice(i,pos_depois-i,valor)
                 }
                   
                 i++
@@ -1056,7 +1065,7 @@ function Main(){
          token2 = RPN_array[pos++];
          
         }
-       return parseInt(RPN_array[0]); 
+       return RPN_array[0]; 
       } //resolve a expressão em reversed polish -> salvo dois numeros sempre e quando chega em um operador eu resolvo os dois numeros para o operador e depois removo os dois numeros que foram executados tal como operador , caso o operador seja unario eu só altero o ultimo numero e o operador, por exemplo , 10+&10, vou operar o segundo numero somando 1000 nele, ou seja 10+1010.
     
     function solve_expression(expression_array,pos_atual){
@@ -1158,10 +1167,10 @@ function Main(){
     //  let linha2 = "b = square(3)";
     //  console.log(read_line(linha2));
     // // console.log(armaz)
-    let cod = "a=7\nb=(2+3)\nsquare(a,b,c)={(a+b+c)^2}\nc=square(2,4,2)\nv=[2,3]" 
+    let cod = "d=2\nsquare(a,b,c)={[a,b,2]}\nc=square(2,4,5)\nv=[2,3]\ne=d+2" 
 
     compila(cod);
-    console.log(armaz.get_vetor_array("v"));
+    console.log(armaz);
     
 }
 
